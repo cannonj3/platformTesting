@@ -1,1 +1,1 @@
-This is the second iteration of a sample file for the git section of the Platform Badge. It is a modified version of the first iteration.
+This is the fourth iteration of a sample file for the git section of the Platform Badge. It is a modified version of the third iteration.
