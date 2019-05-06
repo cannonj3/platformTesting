@@ -1,0 +1,65 @@
+Git
+
+git add <file>
+git commit -m "message"
+git status
+git add . => stages all changed files
+git log - shows commit history (added an alias "hist" so that when using git hist, a nicely formatted history is shown)
+
+git tag <label> - marks the latest commit with label so you can refer to it by that label. To remove a tag use git tag -d <tagname>
+
+git revert HEAD --no-edit => reverts the last commit (this action will show up in the history).  We can replace HEAD with any other commit hash.
+
+git reset --hard <commit> - puts the HEAD at the supplied commit and commits that were further than that in the history are no longer shown (they aren't completely lost though). To see all of them, you can use a "git hist --all" command. Stay in repository until garbage collection is run.
+
+git mv hello.rb lib -> moves the file to a new directory so that you don't have to perform a git add and git rm command.
+
+ls -C .git -> look at the structure of the git directory. The HEAD file contains a reference to the current branch.
+
+git checkout -b <branchname> - creates and switches into a new branch.
+
+If you want to see all branches in the history, use the --all option.  
+
+git merge master -> merges master into the greet branch. This can be done periodically to pick up on any changes in master and keep greet compatible. But it does lead to ugly commit histories. Rebasing can help with that.
+
+After resolving conflicts in a file, use git add <filename> and then git commit -m "message".
+
+git rebase master - pulls in the changes to the master branch (just like merge), but does so in a way that makes the commit history linear and clean.  DON'T USE WHEN the branch is public and shared with others or when the exact history of the commit branch is important (rebase rewrites the history).
+
+After rebasing, you can do a git merge <branch> from master and it will easily be able to pull in the changes from the branch into master.
+
+git clone hello cloned_hello -> clones the hello repository into a cloned_hello repository.
+
+https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes
+
+"origin" typically refers to the primary centralized repository. When in the cloned repository, you can say "git remote" and it will say origin. You can then use the command "git remote show origin" and it will give you some details about it. Origin is the default name that Git gives to the server you cloned from.
+
+When we clone a repository, the cloned repo is not automatically given all the branches of the repository it cloned. You can do "git branch -a" to see even the remote branches.
+
+git fetch -> fetches new commits from remote repository, but doesn't merge these into the local branches.  You can then perform "git merge origin/master" to merge the commits into the local master.
+
+git pull -> combines the two steps above into one step.
+
+git branch --track greet origin/greet => this will set up a local branch named greet that tracks the remote greet branch.
+
+git clone --bare hello hello.git => creates a bare repository called hello.git (bare repos have no working directories).  Some stuff about adding remotes and pushing and pulling.
+
+To delete a branch: git branch -d <branchname>
+
+The following relates to rewriting commit history.  Don't do this if you have already pushed!!
+
+git commit --amend => loads the commit message which you can then edit.  You can also use this if you forgot to put content changes into your last commit - just stage those changes and use this command and it will add it to the last commit. 
+
+git rebase -i HEAD~3 => this will open up the interactive rebase tool and will list the last 3 commits (starting with the oldest at the top). In this tool you can change the order of the commits, get rid of a commit entirely, etc.  You can also choose to "squash" commits together. If the squash option is chosen on one of the commits, git basically applies those changes and the change before it and then makes you combine the messages.  
+
+When I tried to squash the first and second commits, I was having trouble with both showing up in the interactive tool. I found a work-around online that did the following:
+
+git rebase -i HEAD~1
+git reset --soft HEAD^ => This causes the original head to be pointed at
+git commit --amend
+git rebase --continue
+
+git remote add myremote url
+git push -u myremote master (sets up master to track the remote master branch)
+
+
